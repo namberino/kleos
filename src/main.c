@@ -1,6 +1,8 @@
 #include <stdio.h>
 
-int main()
+#include "board.h"
+
+int main(void)
 {
     
 

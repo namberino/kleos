@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.nbl": "nimble",
+        "stdio.h": "c"
+    }
+}

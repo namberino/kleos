@@ -5,6 +5,8 @@ C_SRC = $(wildcard src/*.c)
 HEADERS = $(wildcard include/*.h)
 OBJ = $(patsubst src/%.c, obj/%.o, $(C_SRC))
 
+CFLAGS = -std=c11 -Wall -pedantic -Iinclude
+
 compile: bin/chess
 
 run: compile
@@ -17,7 +19,7 @@ bin:
 	mkdir -p bin
 
 obj/%.o: src/%.c $(HEADERS) | obj
-	"${CC}" -c $< -o $@
+	"${CC}" $(CFLAGS) -c $< -o $@
 
 obj:
 	mkdir -p obj

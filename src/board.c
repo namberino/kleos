@@ -6,7 +6,7 @@ void initialize_board(void)
 {
     for (int i = 0; i < BOARD_SQUARE_NUM; i++)
     {
-        board[i] = BLACK_PAWN;
+        board[i] = -1;
 
         if (is_valid_coordinate(i))
         {

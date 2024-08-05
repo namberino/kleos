@@ -22,6 +22,7 @@
 #define EMPTY_SQUARE ' '
 
 extern wint_t board[BOARD_SQUARE_NUM];
+extern char* valid_coords_str[64];
 
 enum
 {

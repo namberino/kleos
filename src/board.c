@@ -10,7 +10,52 @@ void initialize_board(void)
 
         if (is_valid_coordinate(i))
         {
-            board[i] = WHITE_KING;
+            switch (i)
+            {
+                // black pieces
+                case A1: case H1:
+                    board[i] = BLACK_ROOK;
+                    break;
+                case B1: case G1:
+                    board[i] = BLACK_KNIGHT;
+                    break;
+                case C1: case F1:
+                    board[i] = BLACK_BISHOP;
+                    break;
+                case D1:
+                    board[i] = BLACK_QUEEN;
+                    break;
+                case E1:
+                    board[i] = BLACK_KING;
+                    break;
+                case A2: case B2: case C2: case D2: case E2: case F2: case G2: case H2:
+                    board[i] = BLACK_PAWN;
+                    break;
+
+                // white pieces
+                case A8: case H8:
+                    board[i] = WHITE_ROOK;
+                    break;
+                case B8: case G8:
+                    board[i] = WHITE_KNIGHT;
+                    break;
+                case C8: case F8:
+                    board[i] = WHITE_BISHOP;
+                    break;
+                case D8:
+                    board[i] = WHITE_QUEEN;
+                    break;
+                case E8:
+                    board[i] = WHITE_KING;
+                    break;
+                case A7: case B7: case C7: case D7: case E7: case F7: case G7: case H7:
+                    board[i] = WHITE_PAWN;
+                    break;
+                
+                default:
+                    board[i] = EMPTY_SQUARE;
+                    break;
+            }
         }
     }
 }
@@ -44,7 +89,7 @@ void print_board(void)
     printf("\n             ┌───────────────────┐          \n");
     printf("             │       CHESS       │          \n");
     printf("             └───────────────────┘          \n\n");
-    printf("         a   b   c   d   e   f   g   h     \n");
+    printf("         A   B   C   D   E   F   G   H     \n");
     printf("       ┌───┬───┬───┬───┬───┬───┬───┬───┐   \n");
     printf("     1 │ %lc │ %lc │ %lc │ %lc │ %lc │ %lc │ %lc │ %lc │ 1 \n", board[A1], board[B1], board[C1], board[D1], board[E1], board[F1], board[G1], board[H1]);
     printf("       ├───┼───┼───┼───┼───┼───┼───┼───┤   \n");
@@ -62,5 +107,5 @@ void print_board(void)
     printf("       ├───┼───┼───┼───┼───┼───┼───┼───┤   \n");
     printf("     8 │ %lc │ %lc │ %lc │ %lc │ %lc │ %lc │ %lc │ %lc │ 8 \n", board[A8], board[B8], board[C8], board[D8], board[E8], board[F8], board[G8], board[H8]);
     printf("       └───┴───┴───┴───┴───┴───┴───┴───┘   \n");
-    printf("         a   b   c   d   e   f   g   h     \n\n");
+    printf("         A   B   C   D   E   F   G   H     \n\n");
 }

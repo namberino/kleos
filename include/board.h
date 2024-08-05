@@ -19,6 +19,7 @@
 #define BLACK_BISHOP 0x265D // ♝
 #define BLACK_KNIGHT 0x265E // ♞
 #define BLACK_PAWN   0x265F // ♟
+#define EMPTY_SQUARE ' '
 
 extern wint_t board[BOARD_SQUARE_NUM];
 

@@ -36,3 +36,39 @@ void enter_coord(char* coord)
         }
     }
 }
+
+int coord_to_index(char* coord)
+{
+    int x = 0;
+    int y = 0;
+
+    switch (coord[0])
+    {
+        case 'A': x = 1; break;
+        case 'B': x = 2; break;
+        case 'C': x = 3; break;
+        case 'D': x = 4; break;
+        case 'E': x = 5; break;
+        case 'F': x = 6; break;
+        case 'G': x = 7; break;
+        case 'H': x = 8; break;
+
+        default: break;
+    }
+
+    switch (coord[1])
+    {
+        case '1': y = 20; break;
+        case '2': y = 30; break;
+        case '3': y = 40; break;
+        case '4': y = 50; break;
+        case '5': y = 60; break;
+        case '6': y = 70; break;
+        case '7': y = 80; break;
+        case '8': y = 90; break;
+        
+        default: break;
+    }
+
+    return x + y;
+}

@@ -13,6 +13,7 @@ int main(void)
 
     char* coord = malloc(3);
     enter_coord(coord);
+    printf("Array position: %d\n", coord_to_index(coord));
     free(coord);
 
     return 0;

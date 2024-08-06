@@ -119,3 +119,8 @@ void print_board(void)
     printf("       └───┴───┴───┴───┴───┴───┴───┴───┘   \n");
     printf("         A   B   C   D   E   F   G   H     \n\n");
 }
+
+void move_piece(char* coord)
+{
+    return;
+}

@@ -46,5 +46,6 @@ enum coordinate
 void initialize_board(void);
 bool is_valid_coordinate(int x);
 void print_board(void);
+void move_piece(char* coord);
 
 #endif

@@ -120,7 +120,41 @@ void print_board(void)
     printf("         A   B   C   D   E   F   G   H     \n\n");
 }
 
-void move_piece(char* coord)
+wint_t select_piece(int coord_index)
 {
-    return;
+    if (board[coord_index] != ' ' && board[coord_index] != -1)
+    {
+        return board[coord_index];
+    }
+
+    return ' ';
+}
+
+int move_piece(int src_coord_index, int dst_coord_index)
+{
+    if (board[dst_coord_index] != ' ')
+    {
+        printf("Destination square is occupied\n");
+        return -1;
+    }
+
+    board[dst_coord_index] = board[src_coord_index];
+    board[src_coord_index] = ' ';
+
+    return 0;
+}
+
+void board_debug_print(void)
+{
+    for (int i = 0; i < BOARD_SQUARE_NUM; i++)
+    {
+        if (i % 10 == 0 && i != 0)
+            printf("\n");
+            
+        if (board[i] == -1)
+            printf("%d ", -1);
+        else
+            printf("%lc ", board[i]);
+    }
+    printf("\n");
 }

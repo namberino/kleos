@@ -1,10 +1,14 @@
 #include "util.h"
 
-void enter_coord(char* coord)
+void enter_coord(char* coord, bool to_coord)
 {
     while (true)
     {
-        printf("Enter coordinate: ");
+        if (to_coord)
+            printf("\nEnter destination coordinate: ");
+        else
+            printf("\nEnter source coordinate: ");
+
         fflush(stdin);
 
         if (fgets(coord, sizeof(coord), stdin) != NULL)
@@ -19,7 +23,7 @@ void enter_coord(char* coord)
             {
                 if (strcmp(valid_coords_str[i], coord) == 0)
                 {
-                    printf("You entered: %s\n", coord);
+                    // printf("You entered: %s\n", coord);
                     is_valid_coord = true;
                     break;
                 }

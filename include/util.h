@@ -9,7 +9,7 @@
 
 #include "board.h"
 
-void enter_coord(char* coord);
+void enter_coord(char* coord, bool to_coord);
 int coord_to_index(char* coord);
 
 #endif

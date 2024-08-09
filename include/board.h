@@ -4,6 +4,7 @@
 #include <wctype.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <strings.h>
 
 #define BOARD_SQUARE_NUM 120
 
@@ -46,6 +47,8 @@ enum coordinate
 void initialize_board(void);
 bool is_valid_coordinate(int x);
 void print_board(void);
-void move_piece(char* coord);
+wint_t select_piece(int coord_index);
+int move_piece(int src_coord_index, int dst_coord_index);
+void board_debug_print(void);
 
 #endif

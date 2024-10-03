@@ -25,4 +25,4 @@ obj:
 	mkdir -p obj
 
 clean:
-	rm -rf bin/* obj/*.o
+	rm -f bin/* obj/*.o

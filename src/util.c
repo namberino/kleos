@@ -36,7 +36,7 @@ void enter_coord(char* coord, bool to_coord)
         }
         else
         {
-            printf("Error reading input");
+            printf("Error reading input\n");
         }
     }
 }

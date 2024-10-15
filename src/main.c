@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <locale.h>
+#include <stdbool.h>
 
 #include "board.h"
 #include "util.h"
@@ -12,6 +13,7 @@ int main(void)
     print_board();
 
     char* coord = malloc(3);
+    bool white_turn = true;
 
     while (true)
     {
@@ -27,6 +29,26 @@ int main(void)
             printf("Square is empty\n");
             continue;
         }
+        else if (
+                (selected_piece == WHITE_KING || selected_piece == WHITE_QUEEN ||
+                selected_piece == WHITE_ROOK || selected_piece == WHITE_BISHOP ||
+                selected_piece == WHITE_KNIGHT || selected_piece == WHITE_PAWN) &&
+                !white_turn
+                )
+        {
+            printf("Black's turn. Can only choose black pieces\n");
+            continue;
+        }
+        else if (
+                (selected_piece == BLACK_KING || selected_piece == BLACK_QUEEN ||
+                selected_piece == BLACK_ROOK || selected_piece == BLACK_BISHOP ||
+                selected_piece == BLACK_KNIGHT || selected_piece == BLACK_PAWN) &&
+                white_turn
+                )
+        {
+            printf("White's turn. Can only choose white pieces\n");
+            continue;
+        }
         else
         {
             while (true)
@@ -40,6 +62,7 @@ int main(void)
                     continue;
 
                 print_board();
+                white_turn = !white_turn;
                 break;
             }
         }

@@ -156,7 +156,7 @@ void board_debug_print(void)
 {
     for (int i = 0; i < BOARD_SQUARE_NUM; i++)
     {
-        if (i % 10 == 0 && i != 0)
+        if (i % 8 == 0 && i != 0)
             printf("\n");
             
         if (board[i] == -1)

@@ -132,6 +132,14 @@ wint_t select_piece(int coord_index)
 
 int move_piece(int src_coord_index, int dst_coord_index)
 {
+    wint_t piece = board[src_coord_index];
+
+    if (!validate_move(piece, src_coord_index, dst_coord_index))
+    {
+        printf("Invalid move\n");
+        return -1;
+    }
+
     if (board[dst_coord_index] != ' ')
     {
         printf("Destination square is occupied\n");

@@ -86,7 +86,8 @@ bool is_valid_bishop_move(int src_index, int dst_index)
 
 bool is_valid_queen_move(int src_index, int dst_index)
 {
-    return true;
+    // can move in any direction that the bishop and the knight can
+    return is_valid_bishop_move(src_index, dst_index) || is_valid_rook_move(src_index, dst_index);
 }
 
 bool is_valid_king_move(int src_index, int dst_index)

@@ -50,12 +50,37 @@ bool is_valid_knight_move(int src_index, int dst_index)
     int dx = abs((src_index % 8) - (dst_index % 8)); // column difference
     int dy = abs((src_index / 8) - (dst_index / 8)); // row difference
 
-    // knight can move 2 squares in 1 direction and 1 in the other
+    // can only move 2 squares in 1 direction and 1 in the other
     return (dx == 2 && dy == 1) || (dx == 1 && dy == 2);
 }
 
 bool is_valid_bishop_move(int src_index, int dst_index)
 {
+    // difference between source and destination in x and y axes
+    int dx = abs((src_index % 8) - (dst_index % 8)); // column difference
+    int dy = abs((src_index / 8) - (dst_index / 8)); // row difference
+
+    int src_col = src_index % 8;
+    int dst_col = dst_index % 8;
+
+    // can only move diagonally, meaning equal dx and dy
+    if (dx != dy)
+        return false;
+
+    // determine step based on move direction
+    int step = 0;
+    if (src_index > dst_index)
+        step = src_col > dst_col ? -9 : -7;
+    else
+        step = src_col > dst_col ? 7 : 9;
+
+    // move through each squares
+    for (int index = src_index + step; index != dst_index; index += step)
+    {
+        if (!is_square_empty(index))
+            return false; // obstacle found
+    }
+
     return true;
 }
 

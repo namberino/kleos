@@ -1,17 +1,42 @@
 #include "moves.h"
 
-bool is_valid_pawn_move(int src_index, int dst_index, bool white_turn)
+int en_passant_square = -1;
+
+bool is_valid_pawn_move(int src_index, int dst_index, bool white_turn, wint_t* board)
 {
     // move only 1 square forward
     int move_direction = white_turn ? -8 : 8;
-    if (dst_index == src_index + move_direction)
+    if (dst_index == src_index + move_direction && is_square_empty(dst_index))
+    {
+        en_passant_square = -1;
         return true;
+    }
 
     // if at starting row, 2 squares moves are optional
     int src_row = src_index / 8;
     if (src_row == 6 || src_row == 1)
     {
-        if (dst_index == src_index + move_direction * 2)
+        if (dst_index == src_index + move_direction * 2 && is_square_empty(dst_index))
+        {
+            en_passant_square = dst_index;
+            return true;
+        }
+    }
+
+    // capture logic (capture diagonally or en passant)
+    int src_col = src_index % 8;
+    int dst_col = dst_index % 8;
+    int dst_row = dst_index / 8;
+    if (dst_row == src_row + move_direction / 8 && abs(dst_col - src_col) == 1)
+    {
+        if (dst_index == en_passant_square + move_direction && en_passant_square >= 0 && en_passant_square < 64)
+        {
+            board[en_passant_square] = EMPTY_SQUARE;
+            en_passant_square = -1;
+            return true;
+        }
+
+        if (is_opponent_piece(dst_index, white_turn))
             return true;
     }
 
@@ -113,13 +138,13 @@ bool is_valid_king_move(int src_index, int dst_index)
     return ((dx == 1 && dy == 1) || (dx == 1 && dy == 0) || (dx == 0 && dy == 1));
 }
 
-bool validate_move(wint_t piece, int src_index, int dst_index, bool white_turn)
+bool validate_move(wint_t piece, int src_index, int dst_index, bool white_turn, wint_t* board)
 {
     // multiplexer for the validation functions
     switch (piece)
     {
         case WHITE_PAWN: case BLACK_PAWN:
-            return is_valid_pawn_move(src_index, dst_index, white_turn);
+            return is_valid_pawn_move(src_index, dst_index, white_turn, board);
 
         case WHITE_KNIGHT: case BLACK_KNIGHT:
             return is_valid_knight_move(src_index, dst_index);

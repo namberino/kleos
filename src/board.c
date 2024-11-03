@@ -134,15 +134,9 @@ int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
 {
     wint_t piece = board[src_coord_index];
 
-    if (!validate_move(piece, src_coord_index, dst_coord_index, white_turn))
+    if (!validate_move(piece, src_coord_index, dst_coord_index, white_turn, board))
     {
         printf("Invalid move\n");
-        return -1;
-    }
-
-    if (board[dst_coord_index] != ' ')
-    {
-        printf("Destination square is occupied\n");
         return -1;
     }
 
@@ -152,9 +146,34 @@ int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
     return 0;
 }
 
+bool is_opponent_piece(int index, bool white_turn)
+{
+    wint_t piece = board[index];
+
+    switch (piece)
+    {
+        case BLACK_PAWN: case BLACK_ROOK: case BLACK_KNIGHT:
+        case BLACK_BISHOP: case BLACK_QUEEN: case BLACK_KING:
+            if (white_turn)
+                return true;
+            return false;
+        
+        case WHITE_PAWN: case WHITE_ROOK: case WHITE_KNIGHT:
+        case WHITE_BISHOP: case WHITE_QUEEN: case WHITE_KING:
+            if (white_turn)
+                return false;
+            return true;
+        
+        default:
+            break;
+    }
+
+    return false;
+}
+
 bool is_square_empty(int index)
 {
-    return board[index] == ' ';
+    return board[index] == EMPTY_SQUARE;
 }
 
 void board_debug_print(void)

@@ -152,6 +152,11 @@ int move_piece(int src_coord_index, int dst_coord_index)
     return 0;
 }
 
+bool is_square_empty(int index)
+{
+    return board[index] == ' ';
+}
+
 void board_debug_print(void)
 {
     for (int i = 0; i < BOARD_SQUARE_NUM; i++)

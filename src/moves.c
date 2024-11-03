@@ -7,6 +7,40 @@ bool is_valid_pawn_move(int src_index, int dst_index)
 
 bool is_valid_rook_move(int src_index, int dst_index)
 {
+    // calculate row and column for source and destination
+    int src_row = src_index / 8;
+    int src_col = src_index % 8;
+    int dst_row = dst_index / 8;
+    int dst_col = dst_index % 8;
+
+    // can only move in the same row or column
+    if (src_row != dst_row && src_col != dst_col)
+        return false;
+
+    // check for obstacles along the path
+    if (src_row == dst_row) // move along the row
+    {
+        int col_step = (dst_col > src_col) ? 1 : -1;
+
+        for (int col = src_col + col_step; col != dst_col; col += col_step)
+        {
+            int index = src_row * 8 + col;
+            if (!is_square_empty(index))
+                return false; // obstacle found
+        }
+    }
+    else // move along the column
+    {
+        int row_step = (dst_row > src_row) ? 1 : -1;
+
+        for (int row = src_row + row_step; row != dst_row; row += row_step)
+        {
+            int index = row * 8 + src_col;
+            if (!is_square_empty(index))
+                return false; // obstacle found
+        }
+    }
+
     return true;
 }
 

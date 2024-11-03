@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 #include "pieces.h"
+#include "board.h"
 
 bool is_valid_pawn_move(int src_index, int dst_index);
 bool is_valid_rook_move(int src_index, int dst_index);

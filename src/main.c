@@ -31,9 +31,9 @@ int main(void)
         }
         else if (
                 (selected_piece == WHITE_KING || selected_piece == WHITE_QUEEN ||
-                selected_piece == WHITE_ROOK || selected_piece == WHITE_BISHOP ||
-                selected_piece == WHITE_KNIGHT || selected_piece == WHITE_PAWN) &&
-                !white_turn
+                 selected_piece == WHITE_ROOK || selected_piece == WHITE_BISHOP ||
+                 selected_piece == WHITE_KNIGHT || selected_piece == WHITE_PAWN) &&
+                 !white_turn
                 )
         {
             printf("Black's turn. Can only choose black pieces\n");
@@ -41,9 +41,9 @@ int main(void)
         }
         else if (
                 (selected_piece == BLACK_KING || selected_piece == BLACK_QUEEN ||
-                selected_piece == BLACK_ROOK || selected_piece == BLACK_BISHOP ||
-                selected_piece == BLACK_KNIGHT || selected_piece == BLACK_PAWN) &&
-                white_turn
+                 selected_piece == BLACK_ROOK || selected_piece == BLACK_BISHOP ||
+                 selected_piece == BLACK_KNIGHT || selected_piece == BLACK_PAWN) &&
+                 white_turn
                 )
         {
             printf("White's turn. Can only choose white pieces\n");
@@ -58,7 +58,7 @@ int main(void)
                 printf("Destination coordinate: %s\n", coord);
                 int dst_coord_index = coord_to_index(coord);
                 
-                if (move_piece(src_coord_index, dst_coord_index) == -1)
+                if (move_piece(src_coord_index, dst_coord_index, white_turn) == -1)
                     continue;
 
                 print_board();

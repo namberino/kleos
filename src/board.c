@@ -130,11 +130,11 @@ wint_t select_piece(int coord_index)
     return ' ';
 }
 
-int move_piece(int src_coord_index, int dst_coord_index)
+int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
 {
     wint_t piece = board[src_coord_index];
 
-    if (!validate_move(piece, src_coord_index, dst_coord_index))
+    if (!validate_move(piece, src_coord_index, dst_coord_index, white_turn))
     {
         printf("Invalid move\n");
         return -1;

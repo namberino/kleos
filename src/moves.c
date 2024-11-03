@@ -1,8 +1,21 @@
 #include "moves.h"
 
-bool is_valid_pawn_move(int src_index, int dst_index)
+bool is_valid_pawn_move(int src_index, int dst_index, bool white_turn)
 {
-    return true;
+    // move only 1 square forward
+    int move_direction = white_turn ? -8 : 8;
+    if (dst_index == src_index + move_direction)
+        return true;
+
+    // if at starting row, 2 squares moves are optional
+    int src_row = src_index / 8;
+    if (src_row == 6 || src_row == 1)
+    {
+        if (dst_index == src_index + move_direction * 2)
+            return true;
+    }
+
+    return false;
 }
 
 bool is_valid_rook_move(int src_index, int dst_index)
@@ -92,18 +105,21 @@ bool is_valid_queen_move(int src_index, int dst_index)
 
 bool is_valid_king_move(int src_index, int dst_index)
 {
+    // difference between source and destination in x and y axes
     int dx = abs((src_index % 8) - (dst_index % 8)); // column difference
     int dy = abs((src_index / 8) - (dst_index / 8)); // row difference
 
+    // can move in all direction, but only by 1 square
     return ((dx == 1 && dy == 1) || (dx == 1 && dy == 0) || (dx == 0 && dy == 1));
 }
 
-bool validate_move(wint_t piece, int src_index, int dst_index)
+bool validate_move(wint_t piece, int src_index, int dst_index, bool white_turn)
 {
+    // multiplexer for the validation functions
     switch (piece)
     {
         case WHITE_PAWN: case BLACK_PAWN:
-            return is_valid_pawn_move(src_index, dst_index);
+            return is_valid_pawn_move(src_index, dst_index, white_turn);
 
         case WHITE_KNIGHT: case BLACK_KNIGHT:
             return is_valid_knight_move(src_index, dst_index);

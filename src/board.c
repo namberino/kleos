@@ -130,8 +130,16 @@ wint_t select_piece(int coord_index)
     return ' ';
 }
 
-int move_piece(int src_coord_index, int dst_coord_index)
+int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
 {
+    wint_t piece = board[src_coord_index];
+
+    if (!validate_move(piece, src_coord_index, dst_coord_index, white_turn))
+    {
+        printf("Invalid move\n");
+        return -1;
+    }
+
     if (board[dst_coord_index] != ' ')
     {
         printf("Destination square is occupied\n");
@@ -144,11 +152,16 @@ int move_piece(int src_coord_index, int dst_coord_index)
     return 0;
 }
 
+bool is_square_empty(int index)
+{
+    return board[index] == ' ';
+}
+
 void board_debug_print(void)
 {
     for (int i = 0; i < BOARD_SQUARE_NUM; i++)
     {
-        if (i % 10 == 0 && i != 0)
+        if (i % 8 == 0 && i != 0)
             printf("\n");
             
         if (board[i] == -1)

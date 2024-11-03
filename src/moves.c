@@ -92,7 +92,10 @@ bool is_valid_queen_move(int src_index, int dst_index)
 
 bool is_valid_king_move(int src_index, int dst_index)
 {
-    return true;
+    int dx = abs((src_index % 8) - (dst_index % 8)); // column difference
+    int dy = abs((src_index / 8) - (dst_index / 8)); // row difference
+
+    return ((dx == 1 && dy == 1) || (dx == 1 && dy == 0) || (dx == 0 && dy == 1));
 }
 
 bool validate_move(wint_t piece, int src_index, int dst_index)

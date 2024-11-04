@@ -19,7 +19,7 @@ int main(void)
     {
         enter_coord(coord, false);
         int src_coord_index = coord_to_index(coord);
-        printf("Array position: %d\n", src_coord_index);
+        // printf("Array position: %d\n", src_coord_index);
 
         fflush(stdin);
 

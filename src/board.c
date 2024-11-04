@@ -97,7 +97,7 @@ bool is_valid_coordinate(int x)
 void print_board(void)
 {
     printf("\n             ┌───────────────────┐          \n");
-    printf("             │       CHESS       │          \n");
+    printf("             │    KLEOS ENGINE   │          \n");
     printf("             └───────────────────┘          \n\n");
     printf("         A   B   C   D   E   F   G   H     \n");
     printf("       ┌───┬───┬───┬───┬───┬───┬───┬───┐   \n");

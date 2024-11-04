@@ -9,10 +9,10 @@
 #include "board.h"
 
 bool is_valid_pawn_move(int src_index, int dst_index, bool white_turn, wint_t* board);
-bool is_valid_rook_move(int src_index, int dst_index);
-bool is_valid_knight_move(int src_index, int dst_index);
-bool is_valid_bishop_move(int src_index, int dst_index);
-bool is_valid_queen_move(int src_index, int dst_index);
+bool is_valid_rook_move(int src_index, int dst_index, bool white_turn);
+bool is_valid_knight_move(int src_index, int dst_index, bool white_turn);
+bool is_valid_bishop_move(int src_index, int dst_index, bool white_turn);
+bool is_valid_queen_move(int src_index, int dst_index, bool white_turn);
 bool is_valid_king_move(int src_index, int dst_index, bool white_turn);
 bool is_valid_castling_move(int src_index, int dst_index, bool white_turn, wint_t* board);
 

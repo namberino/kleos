@@ -54,6 +54,9 @@ bool is_valid_pawn_move(int src_index, int dst_index, bool white_turn, wint_t* b
 
 bool is_valid_rook_move(int src_index, int dst_index, bool white_turn)
 {
+    if (!is_square_empty(dst_index) && !is_opponent_piece(dst_index, white_turn))
+        return false;
+
     // rook first moved check
     switch (src_index)
     {
@@ -111,6 +114,9 @@ bool is_valid_rook_move(int src_index, int dst_index, bool white_turn)
 
 bool is_valid_knight_move(int src_index, int dst_index, bool white_turn)
 {
+    if (!is_square_empty(dst_index) && !is_opponent_piece(dst_index, white_turn))
+        return false;
+    
     // difference between source and destination in x and y axes
     int dx = abs((src_index % 8) - (dst_index % 8)); // column difference
     int dy = abs((src_index / 8) - (dst_index / 8)); // row difference
@@ -121,6 +127,9 @@ bool is_valid_knight_move(int src_index, int dst_index, bool white_turn)
 
 bool is_valid_bishop_move(int src_index, int dst_index, bool white_turn)
 {
+    if (!is_square_empty(dst_index) && !is_opponent_piece(dst_index, white_turn))
+        return false;
+
     // difference between source and destination in x and y axes
     int dx = abs((src_index % 8) - (dst_index % 8)); // column difference
     int dy = abs((src_index / 8) - (dst_index / 8)); // row difference
@@ -152,19 +161,7 @@ bool is_valid_bishop_move(int src_index, int dst_index, bool white_turn)
 bool is_valid_queen_move(int src_index, int dst_index, bool white_turn)
 {
     // can move in any direction that the bishop and the knight can
-    if (!is_valid_bishop_move(src_index, dst_index, white_turn) && !is_valid_rook_move(src_index, dst_index, white_turn))
-        return false;
-
-    // capture logic
-    if (!is_square_empty(dst_index))
-    {
-        if (is_opponent_piece(dst_index, white_turn))
-            return true;
-        else
-            return false;
-    }
-
-    return true;;
+    return is_valid_bishop_move(src_index, dst_index, white_turn) || is_valid_rook_move(src_index, dst_index, white_turn);
 }
 
 bool is_valid_king_move(int src_index, int dst_index, bool white_turn)

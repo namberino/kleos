@@ -38,6 +38,7 @@ bool is_valid_coordinate(int x);
 void print_board(void);
 wint_t select_piece(int coord_index);
 int move_piece(int src_coord_index, int dst_coord_index, bool white_turn);
+bool is_opponent_piece(int index, bool white_turn);
 bool is_square_empty(int index);
 void board_debug_print(void);
 

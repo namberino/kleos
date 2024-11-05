@@ -156,16 +156,10 @@ void display(void)
     glutSwapBuffers(); // swap buffers for smooth rendering (double buffering)
 }
 
-void init(void)
-{
-    gluOrtho2D(0, 8, 0, 8); // orthographic projection for an 8x8 grid
-    load_textures();
-}
-
 int get_square_from_mouse(int x, int y)
 {
-    int col = x / (600 / 8);               // Calculate column from x-coordinate
-    int row = y / (600 / 8);               // Calculate row directly from y (flipping it)
+    int col = x / (600 / 8);
+    int row = y / (600 / 8);
     return row * 8 + col;
 }
 
@@ -212,7 +206,8 @@ int main(int argc, char* argv[])
     glutInitWindowSize(600, 600);
     glutCreateWindow("Chess Game");
 
-    init();
+    gluOrtho2D(0, 8, 0, 8); // orthographic projection for an 8x8 grid
+    load_textures();
 
     glutDisplayFunc(display);
     glutMouseFunc(mouse_click);

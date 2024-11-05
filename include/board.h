@@ -14,13 +14,6 @@
 extern wint_t board[BOARD_SQUARE_NUM];
 extern char* valid_coords_str[64];
 
-enum
-{
-    EMPTY,
-    WK, WQ, WR, WB, WN, WP,
-    BK, BQ, BR, BB, BN, BP,
-};
-
 enum coordinate
 {
     A1 = 0, B1, C1, D1, E1, F1, G1, H1,

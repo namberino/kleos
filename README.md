@@ -2,4 +2,4 @@
 
 A chess engine written in C
 
-![engine screenshot](./doc/img/board.png)
+![engine screenshot](https://imgur.com/2DmCVng.png)

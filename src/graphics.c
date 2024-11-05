@@ -5,6 +5,9 @@
 #include "board.h"
 #include "pieces.h"
 
+int selected_square = -1;
+bool white_turn = true;
+
 GLuint textures[12]; // 6 pieces * 2 colors = 12 textures
 
 const float light_square[3] = {1.0f, 1.0f, 0.9f};
@@ -95,18 +98,18 @@ void draw_piece(int x, int y, wint_t piece)
 
         switch (piece)
         {
-            case WHITE_KING: texture_index = 0; break;
-            case WHITE_QUEEN: texture_index = 1; break;
-            case WHITE_ROOK: texture_index = 2; break;
-            case WHITE_BISHOP: texture_index = 3; break;
-            case WHITE_KNIGHT: texture_index = 4; break;
-            case WHITE_PAWN: texture_index = 5; break;
-            case BLACK_KING: texture_index = 6; break;
-            case BLACK_QUEEN: texture_index = 7; break;
-            case BLACK_ROOK: texture_index = 8; break;
-            case BLACK_BISHOP: texture_index = 9; break;
-            case BLACK_KNIGHT: texture_index = 10; break;
-            case BLACK_PAWN: texture_index = 11; break;
+            case BLACK_KING: texture_index = 0; break;
+            case BLACK_QUEEN: texture_index = 1; break;
+            case BLACK_ROOK: texture_index = 2; break;
+            case BLACK_BISHOP: texture_index = 3; break;
+            case BLACK_KNIGHT: texture_index = 4; break;
+            case BLACK_PAWN: texture_index = 5; break;
+            case WHITE_KING: texture_index = 6; break;
+            case WHITE_QUEEN: texture_index = 7; break;
+            case WHITE_ROOK: texture_index = 8; break;
+            case WHITE_BISHOP: texture_index = 9; break;
+            case WHITE_KNIGHT: texture_index = 10; break;
+            case WHITE_PAWN: texture_index = 11; break;
             default: break;
         }
 
@@ -137,7 +140,7 @@ void display(void)
     {
         for (int col = 0; col < 8; col++)
         {
-            int index = row * 8 + col;
+            int index = (7 - row) * 8 + col;
 
             // alternate between light and dark squares
             if ((row + col) % 2 == 0)
@@ -159,6 +162,46 @@ void init(void)
     load_textures();
 }
 
+int get_square_from_mouse(int x, int y)
+{
+    int col = x / (600 / 8);               // Calculate column from x-coordinate
+    int row = y / (600 / 8);               // Calculate row directly from y (flipping it)
+    return row * 8 + col;
+}
+
+void mouse_click(int button, int state, int x, int y)
+{
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+    {
+        int square = get_square_from_mouse(x, y);
+        
+        if (selected_square == -1)
+        {
+            // select source square
+            wint_t selected_piece = select_piece(square);
+
+            if (selected_piece != EMPTY_SQUARE && ((selected_piece < BLACK_KING && white_turn) || (selected_piece >= BLACK_KING && !white_turn)))
+            {
+                selected_square = square;
+                printf("Square: %d\n", square);
+            }
+            else
+            {
+                printf("Invalid piece selection\n");
+            }
+        }
+        else
+        {
+            // select destination square
+            if (move_piece(selected_square, square, white_turn) == 0)
+                white_turn = !white_turn;
+
+            selected_square = -1;
+            glutPostRedisplay(); // refresh the display after a move
+        }
+    }
+}
+
 int main(int argc, char* argv[])
 {
     initialize_board();
@@ -167,10 +210,13 @@ int main(int argc, char* argv[])
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(600, 600);
-    glutCreateWindow("Chess Board Graphics Test");
+    glutCreateWindow("Chess Game");
 
     init();
+
     glutDisplayFunc(display);
+    glutMouseFunc(mouse_click);
+
     glutMainLoop();
 
     return 0;

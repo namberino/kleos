@@ -2,4 +2,6 @@
 
 A chess engine written in C
 
-![engine screenshot](https://imgur.com/2DmCVng.png)
+<p align="center">
+    <img src="https://imgur.com/2DmCVng.png" width=300>
+</p>

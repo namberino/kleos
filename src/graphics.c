@@ -29,34 +29,35 @@ GLuint load_texture(const char* filename)
         return 0;
     }
 
+    // blend alpha to enable transparent background
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // convert SDL surface to an OpenGL texture
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
+    GLuint texture_id;
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
 
-    // Determine the image format (RGB or RGBA)
+    // determine image format (RGB or RGBA)
     GLenum format = (surface->format->BytesPerPixel == 4) ? GL_RGBA : GL_RGB;
 
-    // Upload the image data to the texture
+    // upload image data to the texture
     glTexImage2D(GL_TEXTURE_2D, 0, format, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
 
-    // Set texture parameters
+    // set texture parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // Unbind the texture and free the surface
+    // unbind the texture and free the surface
     glBindTexture(GL_TEXTURE_2D, 0);
     SDL_FreeSurface(surface);
 
     // quit SDL_image
     IMG_Quit();
 
-    return textureID;
+    return texture_id;
 }
 
 void load_textures(void)

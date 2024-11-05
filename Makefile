@@ -3,17 +3,24 @@ CC ?= $(shell which gcc) # fallback compiler
 
 C_SRC = $(wildcard src/*.c)
 HEADERS = $(wildcard include/*.h)
-OBJ = $(patsubst src/%.c, obj/%.o, $(C_SRC))
+OBJ = $(patsubst src/%.c, obj/%.o, $(filter-out src/main%.c, $(C_SRC)))
 
 CFLAGS = -std=c11 -Wall -pedantic -Iinclude
+GLFLAGS = -framework OpenGL -framework GLUT
 
-compile: bin/chess
+compile: bin/graphics
 
 run: compile
 	./bin/chess
 
+run_graphics: compile
+	./bin/graphics
+
 bin/chess: $(OBJ) | bin
 	"$(CC)" -o $@ $(OBJ)
+
+bin/graphics: $(OBJ) | bin
+	"$(CC)" -o $@ $(OBJ) $(GLFLAGS)
 
 bin:
 	mkdir -p bin

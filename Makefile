@@ -6,7 +6,7 @@ HEADERS = $(wildcard include/*.h)
 OBJ = $(patsubst src/%.c, obj/%.o, $(filter-out src/main%.c, $(C_SRC)))
 
 CFLAGS = -std=c11 -Wall -pedantic -Iinclude
-GLFLAGS = -framework OpenGL -framework GLUT -lSDL2 -lSDL2_image
+GLFLAGS = -lSDL2 -lSDL2_image
 
 compile: bin/graphics
 

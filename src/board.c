@@ -39,7 +39,8 @@ void initialize_board(void)
                     board[i] = BLACK_KING;
                     break;
                 case A2: case B2: case C2: case D2: case E2: case F2: case G2: case H2:
-                    board[i] = BLACK_PAWN;
+                    // board[i] = BLACK_PAWN;
+                    board[i] = EMPTY_SQUARE;
                     break;
 
                 // white pieces
@@ -59,7 +60,8 @@ void initialize_board(void)
                     board[i] = WHITE_KING;
                     break;
                 case A7: case B7: case C7: case D7: case E7: case F7: case G7: case H7:
-                    board[i] = WHITE_PAWN;
+                    // board[i] = WHITE_PAWN;
+                    board[i] = EMPTY_SQUARE;
                     break;
                 
                 default:
@@ -177,9 +179,9 @@ bool is_opponent_piece(int index, bool white_turn, wint_t* board_to_check)
     return false;
 }
 
-bool is_square_empty(int index)
+bool is_square_empty(int index, wint_t* board_to_check)
 {
-    return board[index] == EMPTY_SQUARE;
+    return board_to_check[index] == EMPTY_SQUARE;
 }
 
 void board_debug_print(void)

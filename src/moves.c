@@ -2,6 +2,9 @@
 
 int en_passant_square = -1;
 
+int black_king_pos = E1;
+int white_king_pos = E8;
+
 bool white_king_moved = false;
 bool black_king_moved = false;
 bool white_rook_kingside_moved = false;
@@ -45,16 +48,16 @@ bool is_valid_pawn_move(int src_index, int dst_index, bool white_turn, wint_t* b
         }
 
         // normal capture validation
-        if (is_opponent_piece(dst_index, white_turn))
+        if (is_opponent_piece(dst_index, white_turn, board))
             return true;
     }
 
     return false;
 }
 
-bool is_valid_rook_move(int src_index, int dst_index, bool white_turn)
+bool is_valid_rook_move(int src_index, int dst_index, bool white_turn, wint_t* board)
 {
-    if (!is_square_empty(dst_index) && !is_opponent_piece(dst_index, white_turn))
+    if (!is_square_empty(dst_index) && !is_opponent_piece(dst_index, white_turn, board))
         return false;
 
     // rook first moved check
@@ -112,9 +115,9 @@ bool is_valid_rook_move(int src_index, int dst_index, bool white_turn)
     return true;
 }
 
-bool is_valid_knight_move(int src_index, int dst_index, bool white_turn)
+bool is_valid_knight_move(int src_index, int dst_index, bool white_turn, wint_t* board)
 {
-    if (!is_square_empty(dst_index) && !is_opponent_piece(dst_index, white_turn))
+    if (!is_square_empty(dst_index) && !is_opponent_piece(dst_index, white_turn, board))
         return false;
     
     // difference between source and destination in x and y axes
@@ -125,9 +128,9 @@ bool is_valid_knight_move(int src_index, int dst_index, bool white_turn)
     return (dx == 2 && dy == 1) || (dx == 1 && dy == 2);
 }
 
-bool is_valid_bishop_move(int src_index, int dst_index, bool white_turn)
+bool is_valid_bishop_move(int src_index, int dst_index, bool white_turn, wint_t* board)
 {
-    if (!is_square_empty(dst_index) && !is_opponent_piece(dst_index, white_turn))
+    if (!is_square_empty(dst_index) && !is_opponent_piece(dst_index, white_turn, board))
         return false;
 
     // difference between source and destination in x and y axes
@@ -158,10 +161,10 @@ bool is_valid_bishop_move(int src_index, int dst_index, bool white_turn)
     return true;
 }
 
-bool is_valid_queen_move(int src_index, int dst_index, bool white_turn)
+bool is_valid_queen_move(int src_index, int dst_index, bool white_turn, wint_t* board)
 {
     // can move in any direction that the bishop and the knight can
-    return is_valid_bishop_move(src_index, dst_index, white_turn) || is_valid_rook_move(src_index, dst_index, white_turn);
+    return is_valid_bishop_move(src_index, dst_index, white_turn, board) || is_valid_rook_move(src_index, dst_index, white_turn, board);
 }
 
 bool is_valid_king_move(int src_index, int dst_index, bool white_turn)
@@ -176,7 +179,17 @@ bool is_valid_king_move(int src_index, int dst_index, bool white_turn)
     int dy = abs((src_index / 8) - (dst_index / 8)); // row difference
 
     // can move in all direction, but only by 1 square
-    return ((dx == 1 && dy == 1) || (dx == 1 && dy == 0) || (dx == 0 && dy == 1));
+    if ((dx == 1 && dy == 1) || (dx == 1 && dy == 0) || (dx == 0 && dy == 1))
+    {
+        if (white_turn)
+            white_king_pos = dst_index;
+        else
+            black_king_pos = dst_index;
+
+        return true;
+    }
+
+    return false;
 }
 
 bool is_valid_castling_move(int src_index, int dst_index, bool white_turn, wint_t* board)
@@ -222,6 +235,31 @@ bool is_valid_castling_move(int src_index, int dst_index, bool white_turn, wint_
     return false;
 }
 
+bool check_for_checks(int src_index, int dst_index, wint_t* board, bool white_turn)
+{
+    int king_position = white_turn ? white_king_pos : black_king_pos;
+    wint_t* board_copy = malloc(sizeof(wint_t) * 64);
+    copy_array(board, board_copy, 64);
+
+    // make move and check for checks
+    board_copy[dst_index] = board_copy[src_index];
+    board_copy[src_index] = EMPTY_SQUARE;
+
+    for (int i = 0; i < 64; i++)
+    {
+        if (is_opponent_piece(i, white_turn, board_copy) && validate_move(board[i], i, king_position, !white_turn, board_copy))
+        {
+            // check found
+            free(board_copy);
+            return true;
+        }
+    }
+
+    // no check found
+    free(board_copy);
+    return false;
+}
+
 bool validate_move(wint_t piece, int src_index, int dst_index, bool white_turn, wint_t* board)
 {
     // multiplexer for the validation functions
@@ -231,16 +269,16 @@ bool validate_move(wint_t piece, int src_index, int dst_index, bool white_turn, 
             return is_valid_pawn_move(src_index, dst_index, white_turn, board);
 
         case WHITE_KNIGHT: case BLACK_KNIGHT:
-            return is_valid_knight_move(src_index, dst_index, white_turn);
+            return is_valid_knight_move(src_index, dst_index, white_turn, board);
 
         case WHITE_BISHOP: case BLACK_BISHOP:
-            return is_valid_bishop_move(src_index, dst_index, white_turn);
+            return is_valid_bishop_move(src_index, dst_index, white_turn, board);
 
         case WHITE_ROOK: case BLACK_ROOK:
-            return is_valid_rook_move(src_index, dst_index, white_turn);
+            return is_valid_rook_move(src_index, dst_index, white_turn, board);
 
         case WHITE_QUEEN: case BLACK_QUEEN:
-            return is_valid_queen_move(src_index, dst_index, white_turn);
+            return is_valid_queen_move(src_index, dst_index, white_turn, board);
 
         case WHITE_KING: case BLACK_KING:
             // castling condition

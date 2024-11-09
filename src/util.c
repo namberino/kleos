@@ -76,3 +76,9 @@ int coord_to_index(char* coord)
 
     return y * 8 + x;
 }
+
+void copy_array(wint_t* arr1, wint_t* arr2, int n)
+{
+    for (int i = 0; i < n; i++)
+        arr2[i] = arr1[i];
+}

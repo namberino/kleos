@@ -140,15 +140,21 @@ int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
         return -1;
     }
 
+    if (check_for_checks(src_coord_index, dst_coord_index, board, white_turn))
+    {
+        printf("Check found. Must avoid check\n");
+        return -1;
+    }
+
     board[dst_coord_index] = board[src_coord_index];
     board[src_coord_index] = ' ';
 
     return 0;
 }
 
-bool is_opponent_piece(int index, bool white_turn)
+bool is_opponent_piece(int index, bool white_turn, wint_t* board_to_check)
 {
-    wint_t piece = board[index];
+    wint_t piece = board_to_check[index];
 
     switch (piece)
     {

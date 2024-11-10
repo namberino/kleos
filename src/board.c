@@ -142,7 +142,7 @@ int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
     }
 
     // check if move puts player's king in check
-    if (check_for_checks(src_coord_index, dst_coord_index, board, white_turn) && !check_for_mate(board, white_turn))
+    if (check_for_checks(src_coord_index, dst_coord_index, board, white_turn))
     {
         printf("Check found. Must avoid check\n");
         return -1;

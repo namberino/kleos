@@ -39,8 +39,7 @@ void initialize_board(void)
                     board[i] = BLACK_KING;
                     break;
                 case A2: case B2: case C2: case D2: case E2: case F2: case G2: case H2:
-                    // board[i] = BLACK_PAWN;
-                    board[i] = EMPTY_SQUARE;
+                    board[i] = BLACK_PAWN;
                     break;
 
                 // white pieces
@@ -60,8 +59,7 @@ void initialize_board(void)
                     board[i] = WHITE_KING;
                     break;
                 case A7: case B7: case C7: case D7: case E7: case F7: case G7: case H7:
-                    // board[i] = WHITE_PAWN;
-                    board[i] = EMPTY_SQUARE;
+                    board[i] = WHITE_PAWN;
                     break;
                 
                 default:
@@ -136,20 +134,30 @@ int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
 {
     wint_t piece = board[src_coord_index];
 
+    // check if move is valid
     if (!validate_move(piece, src_coord_index, dst_coord_index, white_turn, board))
     {
         printf("Invalid move\n");
         return -1;
     }
 
-    if (check_for_checks(src_coord_index, dst_coord_index, board, white_turn))
+    // check if move puts player's king in check
+    if (check_for_checks(src_coord_index, dst_coord_index, board, white_turn) && !check_for_mate(board, white_turn))
     {
         printf("Check found. Must avoid check\n");
         return -1;
     }
 
+    // make the move
     board[dst_coord_index] = board[src_coord_index];
     board[src_coord_index] = ' ';
+
+    // check for mate on opponent's king
+    if (check_for_mate(board, !white_turn))
+    {
+        printf("Checkmate\n");
+        exit(0);
+    }
 
     return 0;
 }

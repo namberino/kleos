@@ -237,7 +237,7 @@ bool is_valid_castling_move(int src_index, int dst_index, bool white_turn, wint_
 
 bool check_for_checks(int src_index, int dst_index, wint_t* board, bool white_turn)
 {
-    int king_position = white_turn ? white_king_pos : black_king_pos;
+    int king_pos = white_turn ? white_king_pos : black_king_pos;
     wint_t* board_copy = malloc(sizeof(wint_t) * 64);
     copy_array(board, board_copy, 64);
 
@@ -247,7 +247,7 @@ bool check_for_checks(int src_index, int dst_index, wint_t* board, bool white_tu
 
     for (int i = 0; i < 64; i++)
     {
-        if (is_opponent_piece(i, white_turn, board_copy) && validate_move(board_copy[i], i, king_position, !white_turn, board_copy))
+        if (is_opponent_piece(i, white_turn, board_copy) && validate_move(board_copy[i], i, king_pos, !white_turn, board_copy))
         {
             // check found
             free(board_copy);
@@ -258,6 +258,28 @@ bool check_for_checks(int src_index, int dst_index, wint_t* board, bool white_tu
     // no check found
     free(board_copy);
     return false;
+}
+
+bool check_for_mate(wint_t* board, bool white_turn)
+{
+    // loop through each starting position
+    for (int src_index = 0; src_index < 64; src_index++)
+    {
+        // check if piece is player's piece
+        if (!is_opponent_piece(src_index, white_turn, board) && board[src_index] != EMPTY_SQUARE)
+        {
+            // loop through each possible moves
+            for (int dst_index = 0; dst_index < 64; dst_index++)
+            {
+                // validate move to dest index and check if move gets the king out of check, if yes then no checkmate
+                if (validate_move(board[src_index], src_index, dst_index, white_turn, board) && !check_for_checks(src_index, dst_index, board, white_turn))
+                    return false;
+            }
+        }
+    }
+
+    // checkmate
+    return true;
 }
 
 bool validate_move(wint_t piece, int src_index, int dst_index, bool white_turn, wint_t* board)

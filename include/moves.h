@@ -17,6 +17,7 @@ bool is_valid_queen_move(int src_index, int dst_index, bool white_turn, wint_t* 
 bool is_valid_king_move(int src_index, int dst_index, bool white_turn);
 bool is_valid_castling_move(int src_index, int dst_index, bool white_turn, wint_t* board);
 bool check_for_checks(int src_index, int dst_index, wint_t* board, bool white_turn);
+bool check_for_mate(wint_t* board, bool white_turn);
 
 bool validate_move(wint_t piece, int src_index, int dst_index, bool white_turn, wint_t* board);
 

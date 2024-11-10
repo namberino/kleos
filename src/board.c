@@ -155,7 +155,7 @@ int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
     // check for mate on opponent's king
     if (check_for_mate(board, !white_turn))
     {
-        printf("Checkmate. Winner: %s\n", white_turn ? "White" : "Black");
+        printf("Checkmate. %s side won\n", white_turn ? "White" : "Black");
         exit(0);
     }
 

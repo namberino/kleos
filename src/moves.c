@@ -24,7 +24,7 @@ bool is_valid_pawn_move(int src_index, int dst_index, bool white_turn, wint_t* b
 
     // if at starting row, 2 squares moves are optional
     int src_row = src_index / 8;
-    if (src_row == 6 || src_row == 1)
+    if ((white_turn && src_row == 6) || (!white_turn && src_row == 1))
     {
         if (dst_index == src_index + move_direction * 2 && is_square_empty(dst_index, board))
         {

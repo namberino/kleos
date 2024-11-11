@@ -133,12 +133,40 @@ wint_t select_piece(int coord_index)
 int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
 {
     wint_t piece = board[src_coord_index];
+    int move_valid_num = validate_move(piece, src_coord_index, dst_coord_index, white_turn, board);
 
-    // check if move is valid
-    if (!validate_move(piece, src_coord_index, dst_coord_index, white_turn, board))
+    switch (move_valid_num)
     {
-        printf("Invalid move\n");
-        return -1;
+        case -1:
+            printf("Invalid move\n");
+            return -1;
+        
+        case 1: // remove en passant-ed piece
+            board[en_passant_square] = EMPTY_SQUARE;
+            break;
+
+        case 2: // kingside castling
+            // move the kingside rook
+            board[src_coord_index + 1] = board[dst_coord_index + 1];
+            board[dst_coord_index + 1] = EMPTY_SQUARE;
+
+            if (white_turn) white_rook_kingside_moved = true;
+            else black_rook_kingside_moved = true;
+
+            break;
+
+        case 3: // queenside castling
+            // move the queenside rook
+            board[src_coord_index - 1] = board[dst_coord_index - 2];
+            board[dst_coord_index - 2] = EMPTY_SQUARE;
+
+            if (white_turn) white_rook_queenside_moved = true;
+            else black_rook_queenside_moved = true;
+
+            break;
+        
+        default:
+            break;
     }
 
     // check if move puts player's king in check

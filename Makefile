@@ -36,3 +36,5 @@ obj:
 
 clean:
 	rm -f bin/* obj/*.o
+
+.PHONY: clean run run_graphics compile compile_graphics

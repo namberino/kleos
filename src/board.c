@@ -24,22 +24,27 @@ void initialize_board(void)
             {
                 // black pieces
                 case A1: case H1:
-                    board[i] = BLACK_ROOK;
+                    // board[i] = BLACK_ROOK;
+                    board[i] = EMPTY_SQUARE;
                     break;
                 case B1: case G1:
-                    board[i] = BLACK_KNIGHT;
+                    // board[i] = BLACK_KNIGHT;
+                    board[i] = EMPTY_SQUARE;
                     break;
                 case C1: case F1:
-                    board[i] = BLACK_BISHOP;
+                    // board[i] = BLACK_BISHOP;
+                    board[i] = EMPTY_SQUARE;
                     break;
                 case D1:
-                    board[i] = BLACK_QUEEN;
+                    // board[i] = BLACK_QUEEN;
+                    board[i] = EMPTY_SQUARE;
                     break;
                 case E1:
                     board[i] = BLACK_KING;
                     break;
                 case A2: case B2: case C2: case D2: case E2: case F2: case G2: case H2:
-                    board[i] = BLACK_PAWN;
+                    // board[i] = BLACK_PAWN;
+                    board[i] = EMPTY_SQUARE;
                     break;
 
                 // white pieces
@@ -133,14 +138,26 @@ wint_t select_piece(int coord_index)
 int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
 {
     wint_t piece = board[src_coord_index];
-    int move_valid_num = validate_move(piece, src_coord_index, dst_coord_index, white_turn, board);
-
-    switch (move_valid_num)
+    int move_valid_num = validate_move(piece, src_coord_index, dst_coord_index, white_turn, board, false);
+    if (move_valid_num == -1)
     {
-        case -1:
-            printf("Invalid move\n");
-            return -1;
-        
+        printf("Invalid move\n");
+        return -1;
+    }
+
+    // check if move puts player's king in check
+    if (check_for_checks(src_coord_index, dst_coord_index, board, white_turn))
+    {
+        printf("Check found. Must avoid check\n");
+        return -1;
+    }
+
+    board[dst_coord_index] = board[src_coord_index];
+    board[src_coord_index] = ' ';
+
+    // make the move
+    switch (move_valid_num)
+    {   
         case 1: // remove en passant-ed piece
             board[en_passant_square] = EMPTY_SQUARE;
             break;
@@ -164,21 +181,26 @@ int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
             else black_rook_queenside_moved = true;
 
             break;
+
+        case 4: // promote to queen
+            board[dst_coord_index] = white_turn ? WHITE_QUEEN : BLACK_QUEEN;
+            break;
+
+        case 5: // promote to knight
+            board[dst_coord_index] = white_turn ? WHITE_KNIGHT : BLACK_KNIGHT;
+            break;
+
+        case 6: // promote to rook
+            board[dst_coord_index] = white_turn ? WHITE_ROOK : BLACK_ROOK;
+            break;
+
+        case 7: // promote to bishop
+            board[dst_coord_index] = white_turn ? WHITE_BISHOP : BLACK_BISHOP;
+            break;
         
         default:
             break;
     }
-
-    // check if move puts player's king in check
-    if (check_for_checks(src_coord_index, dst_coord_index, board, white_turn))
-    {
-        printf("Check found. Must avoid check\n");
-        return -1;
-    }
-
-    // make the move
-    board[dst_coord_index] = board[src_coord_index];
-    board[src_coord_index] = ' ';
 
     // check for mate on opponent's king
     if (check_for_mate(board, !white_turn))

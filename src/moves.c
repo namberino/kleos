@@ -228,6 +228,38 @@ int is_valid_castling_move(int src_index, int dst_index, bool white_turn, wint_t
     return -1;
 }
 
+int is_valid_promotion_move(int src_index, int dst_index, bool white_turn, wint_t* board, bool is_checking)
+{
+    if (is_checking)
+        return -1;
+
+    if (is_valid_pawn_move(src_index, dst_index, white_turn, board) == -1)
+        return -1;
+
+    char promotion_piece;
+
+    while (1)
+    {
+        printf("Pick a piece (Q - Queen, K - Knight, R - Rook, B - Bishop): ");
+        scanf("%s", &promotion_piece);
+        fflush(stdin);
+
+        switch (toupper(promotion_piece))
+        {
+            case 'Q': return 4;
+            case 'K': return 5;
+            case 'R': return 6;
+            case 'B': return 7;
+            
+            default:
+                printf("Invalid piece selection\n");
+                continue;
+        }
+    }
+
+    return -1;
+}
+
 bool check_for_checks(int src_index, int dst_index, wint_t* board, bool white_turn)
 {
     // save current state of game
@@ -251,7 +283,7 @@ bool check_for_checks(int src_index, int dst_index, wint_t* board, bool white_tu
 
     for (int i = 0; i < 64; i++)
     {
-        if (is_opponent_piece(i, white_turn, board_copy) && validate_move(board_copy[i], i, king_pos, !white_turn, board_copy) == 0)
+        if (is_opponent_piece(i, white_turn, board_copy) && validate_move(board_copy[i], i, king_pos, !white_turn, board_copy, true) == 0)
         {
             // check found
             free(board_copy);
@@ -288,7 +320,7 @@ bool check_for_mate(wint_t* board, bool white_turn)
             for (int dst_index = 0; dst_index < 64; dst_index++)
             {
                 // validate move to dest index and check if move gets the king out of check, if yes then no checkmate
-                if (validate_move(board[src_index], src_index, dst_index, white_turn, board) == 0 && !check_for_checks(src_index, dst_index, board, white_turn))
+                if (validate_move(board[src_index], src_index, dst_index, white_turn, board, true) == 0 && !check_for_checks(src_index, dst_index, board, white_turn))
                     return false;
             }
         }
@@ -298,12 +330,15 @@ bool check_for_mate(wint_t* board, bool white_turn)
     return true;
 }
 
-int validate_move(wint_t piece, int src_index, int dst_index, bool white_turn, wint_t* board)
+int validate_move(wint_t piece, int src_index, int dst_index, bool white_turn, wint_t* board, bool is_checking)
 {
     // multiplexer for the validation functions
     switch (piece)
     {
         case WHITE_PAWN: case BLACK_PAWN:
+            // promotion condition
+            if ((white_turn && dst_index / 8 == 0) || (!white_turn && dst_index / 8 == 7))
+                return is_valid_promotion_move(src_index, dst_index, white_turn, board, is_checking);
             return is_valid_pawn_move(src_index, dst_index, white_turn, board);
 
         case WHITE_KNIGHT: case BLACK_KNIGHT:
@@ -320,7 +355,7 @@ int validate_move(wint_t piece, int src_index, int dst_index, bool white_turn, w
 
         case WHITE_KING: case BLACK_KING:
             // castling condition
-            if ((src_index / 8 == 7 || src_index / 8 == 0) && (abs(dst_index - src_index) == 2))
+            if (((white_turn && src_index / 8 == 7) || (!white_turn && src_index / 8 == 0)) && (abs(dst_index - src_index) == 2))
                 return is_valid_castling_move(src_index, dst_index, white_turn, board);
             return is_valid_king_move(src_index, dst_index, white_turn);
 

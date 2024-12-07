@@ -135,9 +135,9 @@ wint_t select_piece(int coord_index)
     return ' ';
 }
 
-int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
+int move_piece(wint_t* board_in, int src_coord_index, int dst_coord_index, bool white_turn)
 {
-    wint_t piece = board[src_coord_index];
+    wint_t piece = board_in[src_coord_index];
     int move_valid_num = validate_move(piece, src_coord_index, dst_coord_index, white_turn, board, false);
     if (move_valid_num == -1)
     {
@@ -152,20 +152,20 @@ int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
         return -1;
     }
 
-    board[dst_coord_index] = board[src_coord_index];
-    board[src_coord_index] = ' ';
+    board_in[dst_coord_index] = board_in[src_coord_index];
+    board_in[src_coord_index] = ' ';
 
     // make the move
     switch (move_valid_num)
     {   
         case 1: // remove en passant-ed piece
-            board[en_passant_square] = EMPTY_SQUARE;
+            board_in[en_passant_square] = EMPTY_SQUARE;
             break;
 
         case 2: // kingside castling
             // move the kingside rook
-            board[src_coord_index + 1] = board[dst_coord_index + 1];
-            board[dst_coord_index + 1] = EMPTY_SQUARE;
+            board_in[src_coord_index + 1] = board_in[dst_coord_index + 1];
+            board_in[dst_coord_index + 1] = EMPTY_SQUARE;
 
             if (white_turn) white_rook_kingside_moved = true;
             else black_rook_kingside_moved = true;
@@ -174,8 +174,8 @@ int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
 
         case 3: // queenside castling
             // move the queenside rook
-            board[src_coord_index - 1] = board[dst_coord_index - 2];
-            board[dst_coord_index - 2] = EMPTY_SQUARE;
+            board_in[src_coord_index - 1] = board_in[dst_coord_index - 2];
+            board_in[dst_coord_index - 2] = EMPTY_SQUARE;
 
             if (white_turn) white_rook_queenside_moved = true;
             else black_rook_queenside_moved = true;
@@ -183,19 +183,19 @@ int move_piece(int src_coord_index, int dst_coord_index, bool white_turn)
             break;
 
         case 4: // promote to queen
-            board[dst_coord_index] = white_turn ? WHITE_QUEEN : BLACK_QUEEN;
+            board_in[dst_coord_index] = white_turn ? WHITE_QUEEN : BLACK_QUEEN;
             break;
 
         case 5: // promote to knight
-            board[dst_coord_index] = white_turn ? WHITE_KNIGHT : BLACK_KNIGHT;
+            board_in[dst_coord_index] = white_turn ? WHITE_KNIGHT : BLACK_KNIGHT;
             break;
 
         case 6: // promote to rook
-            board[dst_coord_index] = white_turn ? WHITE_ROOK : BLACK_ROOK;
+            board_in[dst_coord_index] = white_turn ? WHITE_ROOK : BLACK_ROOK;
             break;
 
         case 7: // promote to bishop
-            board[dst_coord_index] = white_turn ? WHITE_BISHOP : BLACK_BISHOP;
+            board_in[dst_coord_index] = white_turn ? WHITE_BISHOP : BLACK_BISHOP;
             break;
         
         default:

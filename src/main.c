@@ -58,7 +58,7 @@ int main(void)
                 printf("Destination coordinate: %s\n", coord);
                 int dst_coord_index = coord_to_index(coord);
                 
-                if (move_piece(src_coord_index, dst_coord_index, white_turn) == -1)
+                if (move_piece(board, src_coord_index, dst_coord_index, white_turn) == -1)
                     continue;
 
                 print_board();

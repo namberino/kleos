@@ -169,6 +169,9 @@ int is_valid_queen_move(int src_index, int dst_index, bool white_turn, wint_t* b
 
 int is_valid_king_move(int src_index, int dst_index, bool white_turn)
 {
+    if (!is_square_empty(dst_index, board) && !is_opponent_piece(dst_index, white_turn, board))
+        return -1;
+        
     // difference between source and destination in x and y axes
     int dx = abs((src_index % 8) - (dst_index % 8)); // column difference
     int dy = abs((src_index / 8) - (dst_index / 8)); // row difference

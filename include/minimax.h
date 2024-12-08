@@ -22,7 +22,7 @@ struct Move
 int evaluate_board(wint_t* board);
 Move* generate_possible_moves(wint_t* board, bool white_turn);
 int minimax(wint_t* board, int depth, bool max_player, int alpha, int beta);
-int get_best_move(wint_t* board, bool white_turn);
+int get_best_move(wint_t* board, bool white_turn, int* num_moves);
 
 #endif
 

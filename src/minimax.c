@@ -46,7 +46,7 @@ Move* generate_possible_moves(wint_t* board, bool white_turn, int* num_moves)
             // loop through each possible moves
             for (int dst_index = 0; dst_index < 64; dst_index++)
             {
-                struct Move possible_move;
+                Move possible_move;
                 wint_t* board_copy = malloc(sizeof(wint_t) * 64);
                 copy_array(board, board_copy, 64);
 
@@ -67,17 +67,15 @@ Move* generate_possible_moves(wint_t* board, bool white_turn, int* num_moves)
     }
 
     *num_moves = size;
-    return possible_moves
+    return possible_moves;
 }
 
 
 // minimax algorithm
-Move minimax(wint_t* board, int depth, bool max_player, int alpha, int beta)
+int minimax(wint_t* board, int depth, bool max_player, int alpha, int beta, Move* best_position)
 {
     if (depth == 0)
         return evaluate_board(board);
-
-    Move best_position;
 
     if (max_player)
     {
@@ -87,12 +85,12 @@ Move minimax(wint_t* board, int depth, bool max_player, int alpha, int beta)
 
         for (int move = 0; move < num_possible_moves; move++)
         {
-            int child_eval = minimax(possible_moves[move].board_position, depth - 1, false, alpha, beta);
+            int child_eval = minimax(possible_moves[move].board_position, depth - 1, false, alpha, beta, best_position);
 
             if (child_eval > max_eval)
             {
                 max_eval = child_eval;
-                best_position = possible_moves[move];
+                *best_position = possible_moves[move];
             }
 
             alpha = alpha > max_eval ? alpha : max_eval;
@@ -100,7 +98,7 @@ Move minimax(wint_t* board, int depth, bool max_player, int alpha, int beta)
                 break;
         }
 
-        // return max_eval;
+        return max_eval;
     }
     else
     {
@@ -110,12 +108,12 @@ Move minimax(wint_t* board, int depth, bool max_player, int alpha, int beta)
 
         for (int move = 0; move < num_possible_moves; move++)
         {
-            int child_eval = minimax(possible_moves[move].board_position, depth - 1, true, alpha, beta);
+            int child_eval = minimax(possible_moves[move].board_position, depth - 1, true, alpha, beta, best_position);
 
             if (child_eval < min_eval)
             {
                 min_eval = child_eval;
-                best_position = possible_moves[move];
+                *best_position = possible_moves[move];
             }
 
             beta = beta < min_eval ? beta : min_eval;
@@ -123,10 +121,8 @@ Move minimax(wint_t* board, int depth, bool max_player, int alpha, int beta)
                 break;
         }
 
-        // return min_eval;
+        return min_eval;
     }
-
-    return best_position;
 }
 
 

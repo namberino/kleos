@@ -64,16 +64,16 @@ int is_valid_rook_move(int src_index, int dst_index, bool white_turn, wint_t* bo
     switch (src_index)
     {
         // black queenside rook
-        case 0: printf("black queenside\n"); black_rook_queenside_moved = true; break;
+        case 0: black_rook_queenside_moved = true; break;
         
         // black kingside rook
-        case 7: printf("black kingside\n"); black_rook_kingside_moved = true; break;
+        case 7: black_rook_kingside_moved = true; break;
         
         // white queenside rook
-        case 56: printf("white queenside\n"); white_rook_queenside_moved = true; break;
+        case 56: white_rook_queenside_moved = true; break;
 
         // white kingside rook
-        case 63: printf("white kingside\n"); white_rook_kingside_moved = true; break;
+        case 63: white_rook_kingside_moved = true; break;
         
         default: break;
     }

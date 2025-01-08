@@ -8,6 +8,7 @@
 
 #include "moves.h"
 #include "pieces.h"
+#include "minimax.h"
 
 #define BOARD_SQUARE_NUM 64
 
@@ -34,5 +35,6 @@ int move_piece(wint_t* board_in, int src_coord_index, int dst_coord_index, bool 
 bool is_opponent_piece(int index, bool white_turn, wint_t* board_to_check);
 bool is_square_empty(int index, wint_t* board_to_check);
 void board_debug_print(void);
+void get_the_best_move(bool white_turn);
 
 #endif

@@ -65,6 +65,7 @@ int main(void)
                 white_turn = !white_turn;
                 break;
             }
+            get_the_best_move(!white_turn);
         }
     }
 

@@ -71,7 +71,8 @@ Move* generate_possible_moves(wint_t* board, bool white_turn, int* num_moves)
 }
 
 
-// minimax algorithm
+// minimax algorithm + AB pruning
+// look through move tree using DFS
 int minimax(wint_t* board, int depth, bool max_player, int alpha, int beta, Move* best_position)
 {
     if (depth == 0)
@@ -100,7 +101,7 @@ int minimax(wint_t* board, int depth, bool max_player, int alpha, int beta, Move
 
         return max_eval;
     }
-    else
+    else // minimizing player evaluation
     {
         int min_eval = INT_MAX;
         int num_possible_moves;
@@ -129,5 +130,12 @@ int minimax(wint_t* board, int depth, bool max_player, int alpha, int beta, Move
 // get the best move using minimax
 int get_best_move(wint_t* board, bool white_turn)
 {
-    
+    Move* best_position = (Move*)malloc(sizeof(Move));
+    int value = minimax(board, 3, white_turn, INT_MIN, INT_MAX, best_position);
+    printf("Evaluation: %d\n", value);
+    printf("Best move: %d, %d\n", best_position->src_index, best_position->dst_index);
+    printf("Board: %lc | %lc", board[best_position->src_index], board[best_position->dst_index]);
+    free(best_position);
+
+    return 0;
 }

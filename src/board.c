@@ -24,27 +24,22 @@ void initialize_board(void)
             {
                 // black pieces
                 case A1: case H1:
-                    // board[i] = BLACK_ROOK;
-                    board[i] = EMPTY_SQUARE;
+                    board[i] = BLACK_ROOK;
                     break;
                 case B1: case G1:
-                    // board[i] = BLACK_KNIGHT;
-                    board[i] = EMPTY_SQUARE;
+                    board[i] = BLACK_KNIGHT;
                     break;
                 case C1: case F1:
-                    // board[i] = BLACK_BISHOP;
-                    board[i] = EMPTY_SQUARE;
+                    board[i] = BLACK_BISHOP;
                     break;
                 case D1:
-                    // board[i] = BLACK_QUEEN;
-                    board[i] = EMPTY_SQUARE;
+                    board[i] = BLACK_QUEEN;
                     break;
                 case E1:
                     board[i] = BLACK_KING;
                     break;
                 case A2: case B2: case C2: case D2: case E2: case F2: case G2: case H2:
-                    // board[i] = BLACK_PAWN;
-                    board[i] = EMPTY_SQUARE;
+                    board[i] = BLACK_PAWN;
                     break;
 
                 // white pieces
@@ -255,4 +250,9 @@ void board_debug_print(void)
             printf("%lc ", board[i]);
     }
     printf("\n");
+}
+
+void get_the_best_move(bool white_turn)
+{
+    int value = get_best_move(board, white_turn);
 }
